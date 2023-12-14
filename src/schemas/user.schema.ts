@@ -12,7 +12,7 @@ export class User {
   email: string;
 
   @Prop()
-  photo: number;
+  photo: string;
 
   @Prop(raw({ endpoint: String, p256dh: String, auth: String }))
   push: Record<string, string>;
