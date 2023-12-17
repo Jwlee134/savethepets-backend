@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PostsModule } from './posts/posts.module';
 import { PhotosModule } from './photos/photos.module';
 import { AuthModule } from './auth/auth.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuthModule } from './auth/auth.module';
     OauthModule,
     PostsModule,
     PhotosModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

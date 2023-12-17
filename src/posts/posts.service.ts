@@ -6,14 +6,12 @@ import { UpdatePostDto } from './dtos/update-post.dto';
 import { Post } from 'src/schemas/post.schema';
 import { GetPostsDto } from './dtos/get-posts.dto';
 import { Timeline } from 'src/schemas/timeline.schema';
-import { Comment } from 'src/schemas/comment.schema';
 
 @Injectable()
 export class PostsService {
   constructor(
     @InjectModel(Post.name) private postModel: Model<Post>,
     @InjectModel(Timeline.name) private timelineModel: Model<Timeline>,
-    @InjectModel(Comment.name) private commentModel: Model<Comment>,
   ) {}
 
   async getPosts(dto: GetPostsDto) {
@@ -64,13 +62,6 @@ export class PostsService {
       .find({ missingPost: id, confirmed: true })
       .populate('sightingPost')
       .sort({ 'sightingPost.time': 1 });
-  }
-
-  async getPostComments(id: string) {
-    return await this.commentModel
-      .find({ post: id })
-      .populate('author', ['_id', 'name', 'email'])
-      .sort({ createdAt: -1 });
   }
 
   async updatePost(dto: UpdatePostDto, postId: string, userId: string) {

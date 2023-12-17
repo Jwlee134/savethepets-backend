@@ -47,12 +47,6 @@ export class PostsController {
     return await this.postsService.getPostTimeline(id);
   }
 
-  @Public()
-  @Get(':id/comments')
-  async getPostComments(@Param('id') id: string) {
-    return await this.postsService.getPostComments(id);
-  }
-
   @Put(':id')
   async updatePost(
     @Body() updatePostDto: UpdatePostDto,
