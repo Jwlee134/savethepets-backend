@@ -12,7 +12,7 @@ export class Timeline {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post' })
   sightingPost: Post;
 
-  @Prop()
+  @Prop({ default: false })
   confirmed: boolean;
 }
 

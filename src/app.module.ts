@@ -8,6 +8,7 @@ import { PostsModule } from './posts/posts.module';
 import { PhotosModule } from './photos/photos.module';
 import { AuthModule } from './auth/auth.module';
 import { CommentsModule } from './comments/comments.module';
+import { TimelinesModule } from './timelines/timelines.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CommentsModule } from './comments/comments.module';
     PostsModule,
     PhotosModule,
     CommentsModule,
+    TimelinesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

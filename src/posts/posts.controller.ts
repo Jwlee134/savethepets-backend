@@ -41,12 +41,6 @@ export class PostsController {
     return await this.postsService.getPost(id, userId);
   }
 
-  @Public()
-  @Get(':id/timeline')
-  async getPostTimeline(@Param('id') id: string) {
-    return await this.postsService.getPostTimeline(id);
-  }
-
   @Put(':id')
   async updatePost(
     @Body() updatePostDto: UpdatePostDto,

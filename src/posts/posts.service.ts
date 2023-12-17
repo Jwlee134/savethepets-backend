@@ -1,17 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { Post } from 'src/schemas/post.schema';
 import { GetPostsDto } from './dtos/get-posts.dto';
-import { Timeline } from 'src/schemas/timeline.schema';
+import { TimelinesService } from 'src/timelines/timelines.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     @InjectModel(Post.name) private postModel: Model<Post>,
-    @InjectModel(Timeline.name) private timelineModel: Model<Timeline>,
+    private timelineService: TimelinesService,
   ) {}
 
   async getPosts(dto: GetPostsDto) {
@@ -35,33 +35,17 @@ export class PostsService {
   }
 
   async getPost(id: string, userId?: string) {
+    let requestedTimeline: Types.ObjectId | null = null;
     const post = await this.postModel
       .findById(id)
       .populate('author', ['_id', 'name', 'email']);
-    /* 유저가 로그인한 상태이고 실종 게시물이며 이 게시물의 작성자가 현재 로그인한 유저의 목격 게시물에
-    타임라인 추가 요청을 보낸 상태리면 isTimelineRequested를 true로 설정한다. */
     if (userId && post.type === 0) {
-      const requestedTimeline = await this.timelineModel
-        .findOne({ confirmed: false, missingPost: id })
-        .populate<{ sightingPost: { author: string } }>(
-          'sightingPost',
-          'author', // select author
-        );
-      if (
-        requestedTimeline &&
-        requestedTimeline.sightingPost.author === userId
-      ) {
-        return { ...post.toJSON(), isTimelineRequested: true };
-      }
+      requestedTimeline = await this.timelineService.getRequestedTimeline(
+        id,
+        userId,
+      );
     }
-    return { ...post.toJSON(), isTimelineRequested: false };
-  }
-
-  async getPostTimeline(id: string) {
-    return await this.timelineModel
-      .find({ missingPost: id, confirmed: true })
-      .populate('sightingPost')
-      .sort({ 'sightingPost.time': 1 });
+    return { ...post.toJSON(), requestedTimeline };
   }
 
   async updatePost(dto: UpdatePostDto, postId: string, userId: string) {
