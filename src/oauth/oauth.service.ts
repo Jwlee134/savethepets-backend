@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import axios from 'axios';
 import { Model } from 'mongoose';
+import { AuthService } from 'src/auth/auth.service';
 import { User, UserDocument } from 'src/schemas/user.schema';
 
 @Injectable()
@@ -11,16 +11,8 @@ export class OauthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private configService: ConfigService,
-    private jwtService: JwtService,
+    private authService: AuthService,
   ) {}
-
-  async signJwt(sub: string, email: string) {
-    const token = await this.jwtService.signAsync(
-      { sub, email },
-      { secret: this.configService.get('JWT_SECRET'), expiresIn: '1y' },
-    );
-    return token;
-  }
 
   async googleLogin(code: string) {
     let accessToken: string;
@@ -59,7 +51,7 @@ export class OauthService {
           photo: data.picture,
         });
       }
-      const token = await this.signJwt(user.id, user.email);
+      const token = await this.authService.signJwt(user.id, user.email);
       return { token };
     } catch {
       throw new UnauthorizedException('Google API user info GET error');
@@ -103,7 +95,7 @@ export class OauthService {
           photo: data.avatar_url,
         });
       }
-      const token = await this.signJwt(user.id, user.email);
+      const token = await this.authService.signJwt(user.id, user.email);
       return { token };
     } catch {
       throw new UnauthorizedException('Github API user info GET error');

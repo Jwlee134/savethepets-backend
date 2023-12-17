@@ -6,35 +6,41 @@ export type PostDocument = HydratedDocument<Post>;
 
 @Schema({ timestamps: true })
 export class Post {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
   author: User;
 
-  @Prop()
+  @Prop({ required: true })
   type: number;
 
-  @Prop()
+  @Prop({ required: true })
   description: string;
 
-  @Prop()
+  @Prop({ required: true })
   species: number;
 
-  @Prop()
+  @Prop({ required: true })
   breed: number;
 
-  @Prop()
+  @Prop({ required: true })
   latitude: number;
 
-  @Prop()
+  @Prop({ required: true })
   longitude: number;
 
-  @Prop()
-  contact: number;
+  @Prop({ required: true })
+  contact: string;
 
-  @Prop()
+  @Prop({ required: true })
   sex: number;
 
-  @Prop()
+  @Prop({ required: true })
   address: string;
+
+  @Prop({ required: true })
+  photos: string[];
+
+  @Prop({ required: true })
+  time: Date;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

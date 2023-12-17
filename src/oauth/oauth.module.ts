@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { OauthController } from './oauth.controller';
 import { OauthService } from './oauth.service';
-import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from 'src/auth/auth.module';
 import { User, UserSchema } from 'src/schemas/user.schema';
 
 @Module({
   imports: [
-    JwtModule.register({ global: true }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    AuthModule,
   ],
   controllers: [OauthController],
   providers: [OauthService],
