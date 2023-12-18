@@ -11,6 +11,9 @@ import {
 import { TimelinesService } from './timelines.service';
 import { Public } from 'src/decorators/public.decorator';
 import { RequestTimelineDto } from './dtos/request-timeline.dto';
+import { User } from 'src/decorators/user.decorator';
+import { JwtPayload } from 'src/auth/auth.service';
+import { ConfirmTimelineDto } from './dtos/confirm-timeline.dto';
 
 @Controller('timelines')
 export class TimelinesController {
@@ -23,13 +26,20 @@ export class TimelinesController {
   }
 
   @Post()
-  async requestTimeline(@Body() dto: RequestTimelineDto) {
-    return await this.timelinesService.requestTimeline(dto);
+  async requestTimeline(
+    @Body() dto: RequestTimelineDto,
+    @User() user: JwtPayload,
+  ) {
+    return await this.timelinesService.requestTimeline(dto, user);
   }
 
   @Put(':id')
-  async confirmTimeline(@Param('id') id: string) {
-    return await this.timelinesService.confirmTimeline(id);
+  async confirmTimeline(
+    @Param('id') id: string,
+    @Body() dto: ConfirmTimelineDto,
+    @User() user: JwtPayload,
+  ) {
+    return await this.timelinesService.confirmTimeline(id, dto, user);
   }
 
   @Delete(':id')

@@ -51,7 +51,11 @@ export class OauthService {
           photo: data.picture,
         });
       }
-      const token = await this.authService.signJwt(user.id, user.email);
+      const token = await this.authService.signJwt(
+        user.id,
+        user.name,
+        user.photo,
+      );
       return { token };
     } catch {
       throw new UnauthorizedException('Google API user info GET error');
@@ -95,7 +99,11 @@ export class OauthService {
           photo: data.avatar_url,
         });
       }
-      const token = await this.authService.signJwt(user.id, user.email);
+      const token = await this.authService.signJwt(
+        user.id,
+        user.name,
+        user.photo,
+      );
       return { token };
     } catch {
       throw new UnauthorizedException('Github API user info GET error');

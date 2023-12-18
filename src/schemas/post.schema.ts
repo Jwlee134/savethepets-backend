@@ -16,10 +16,10 @@ export class Post {
   description: string;
 
   @Prop({ required: true })
-  species: number;
+  species: string;
 
   @Prop({ required: true })
-  breed: number;
+  breed: string;
 
   @Prop({ required: true })
   latitude: number;
@@ -31,7 +31,7 @@ export class Post {
   contact: string;
 
   @Prop({ required: true })
-  sex: number;
+  sex: string;
 
   @Prop({ required: true })
   address: string;

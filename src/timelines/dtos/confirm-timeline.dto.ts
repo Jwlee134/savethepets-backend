@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class RequestTimelineDto {
+export class ConfirmTimelineDto {
   @IsNotEmpty()
   @IsString()
   missingPost: string;
@@ -11,9 +11,5 @@ export class RequestTimelineDto {
 
   @IsNotEmpty()
   @IsString()
-  sightingPost: string;
-
-  @IsNotEmpty()
-  @IsString()
-  sightingPostAuthor: string;
+  missingPostAuthor: string;
 }

@@ -7,11 +7,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Timeline } from 'src/schemas/timeline.schema';
 import { RequestTimelineDto } from './dtos/request-timeline.dto';
+import { NotificationsService } from 'src/notifications/notifications.service';
+import { JwtPayload } from 'src/auth/auth.service';
+import { ConfirmTimelineDto } from './dtos/confirm-timeline.dto';
 
 @Injectable()
 export class TimelinesService {
   constructor(
     @InjectModel(Timeline.name) private timelineModel: Model<Timeline>,
+    private notificationsService: NotificationsService,
   ) {}
 
   async getTimelines(id: string) {
@@ -21,7 +25,15 @@ export class TimelinesService {
       .sort({ 'sightingPost.time': 1 });
   }
 
-  async requestTimeline({ missingPost, sightingPost }: RequestTimelineDto) {
+  async requestTimeline(
+    {
+      missingPost,
+      sightingPost,
+      sightingPostAuthor,
+      missingPostThumbnail,
+    }: RequestTimelineDto,
+    user: JwtPayload,
+  ) {
     const existingTimeline = await this.timelineModel.exists({
       confirmed: true,
       sightingPost,
@@ -34,6 +46,14 @@ export class TimelinesService {
     const newTimeline = await this.timelineModel.create({
       missingPost,
       sightingPost,
+    });
+    await this.notificationsService.createNotification({
+      content: `${user.name}님이 회원님의 목격 게시물을 타임라인에 추가하고 싶어합니다.`,
+      photo: missingPostThumbnail,
+      post: missingPost,
+      receiver: sightingPostAuthor,
+      sender: user.id,
+      type: 3,
     });
     return { _id: newTimeline._id };
   }
@@ -50,7 +70,15 @@ export class TimelinesService {
     return null;
   }
 
-  async confirmTimeline(id: string) {
+  async confirmTimeline(
+    id: string,
+    {
+      missingPost,
+      missingPostAuthor,
+      missingPostThumbnail,
+    }: ConfirmTimelineDto,
+    user: JwtPayload,
+  ) {
     const updatedTimeline = await this.timelineModel.findOneAndUpdate(
       { _id: id },
       { confirmed: true },
@@ -58,6 +86,14 @@ export class TimelinesService {
     if (!updatedTimeline) {
       throw new NotFoundException('타임라인이 존재하지 않습니다.');
     }
+    await this.notificationsService.createNotification({
+      content: `${user.name}님이 회원님의 타임라인 추가 요청을 수락했습니다.`,
+      photo: missingPostThumbnail,
+      post: missingPost,
+      receiver: missingPostAuthor,
+      sender: user.id,
+      type: 4,
+    });
     return { _id: updatedTimeline._id };
   }
 

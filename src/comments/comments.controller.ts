@@ -13,6 +13,7 @@ import { User } from 'src/decorators/user.decorator';
 import { Public } from 'src/decorators/public.decorator';
 import { CreateCommentDto } from './dtos/create-comment.dto';
 import { UpdateCommentDto } from './dtos/update-comment.dto';
+import { JwtPayload } from 'src/auth/auth.service';
 
 @Controller('comments')
 export class CommentsController {
@@ -25,20 +26,17 @@ export class CommentsController {
   }
 
   @Post()
-  async createComment(
-    @Body() dto: CreateCommentDto,
-    @User('id') userId: string,
-  ) {
-    return await this.commentsService.createComment(dto, userId);
+  async createComment(@Body() dto: CreateCommentDto, @User() user: JwtPayload) {
+    return await this.commentsService.createComment(dto, user);
   }
 
   @Put(':id')
   async updateComment(
     @Param('id') id: string,
-    @User('id') userId: string,
-    @Body() { content }: UpdateCommentDto,
+    @User() user: JwtPayload,
+    @Body() dto: UpdateCommentDto,
   ) {
-    return await this.commentsService.updateComment(id, userId, content);
+    return await this.commentsService.updateComment(id, user, dto);
   }
 
   @Delete(':id')

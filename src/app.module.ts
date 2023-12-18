@@ -9,6 +9,9 @@ import { PhotosModule } from './photos/photos.module';
 import { AuthModule } from './auth/auth.module';
 import { CommentsModule } from './comments/comments.module';
 import { TimelinesModule } from './timelines/timelines.module';
+import { PushModule } from './push/push.module';
+import { UsersModule } from './users/users.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -26,6 +29,9 @@ import { TimelinesModule } from './timelines/timelines.module';
     PhotosModule,
     CommentsModule,
     TimelinesModule,
+    PushModule,
+    UsersModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -3,4 +3,6 @@ import { CreateCommentDto } from './create-comment.dto';
 
 export class UpdateCommentDto extends PickType(CreateCommentDto, [
   'content',
+  'mentionedUserId',
+  'mentionedUserName',
 ] as const) {}
