@@ -100,4 +100,8 @@ export class PostsService {
     }
     return { _id: deletedPost._id };
   }
+
+  async getMyPosts(userId: string) {
+    return await this.postModel.find({ author: userId });
+  }
 }

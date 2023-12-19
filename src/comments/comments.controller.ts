@@ -25,6 +25,11 @@ export class CommentsController {
     return await this.commentsService.getComments(id);
   }
 
+  @Get('my-comments')
+  async getMyComments(@User('id') id: string) {
+    return await this.commentsService.getMyComments(id);
+  }
+
   @Post()
   async createComment(@Body() dto: CreateCommentDto, @User() user: JwtPayload) {
     return await this.commentsService.createComment(dto, user);

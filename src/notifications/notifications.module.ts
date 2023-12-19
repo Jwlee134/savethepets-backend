@@ -6,6 +6,8 @@ import {
   Notification,
   NotificationSchema,
 } from 'src/schemas/notification.schema';
+import { UsersModule } from 'src/users/users.module';
+import { NotificationsController } from './notifications.controller';
 
 @Module({
   imports: [
@@ -13,8 +15,10 @@ import {
       { name: Notification.name, schema: NotificationSchema },
     ]),
     PushModule,
+    UsersModule,
   ],
   providers: [NotificationsService],
   exports: [NotificationsService],
+  controllers: [NotificationsController],
 })
 export class NotificationsModule {}

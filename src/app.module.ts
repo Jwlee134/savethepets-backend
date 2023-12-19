@@ -12,6 +12,7 @@ import { TimelinesModule } from './timelines/timelines.module';
 import { PushModule } from './push/push.module';
 import { UsersModule } from './users/users.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { BookmarksModule } from './bookmarks/bookmarks.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     PushModule,
     UsersModule,
     NotificationsModule,
+    BookmarksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

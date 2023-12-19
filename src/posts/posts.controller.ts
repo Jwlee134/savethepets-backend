@@ -27,6 +27,11 @@ export class PostsController {
     return await this.postsService.getPosts(getPostsDto);
   }
 
+  @Get('my-posts')
+  async getMyPosts(@User('id') id: string) {
+    return await this.postsService.getMyPosts(id);
+  }
+
   @Post()
   async createPost(
     @Body() createPostDto: CreatePostDto,

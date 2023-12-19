@@ -91,4 +91,8 @@ export class CommentsService {
     }
     return { _id: deletedComment._id };
   }
+
+  async getMyComments(userId: string) {
+    return await this.commentModel.find({ author: userId }).populate('post');
+  }
 }
